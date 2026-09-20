@@ -25,3 +25,18 @@ test('new users can register', function () {
 
     $this->assertAuthenticated();
 });
+
+test('registration does not grant admin access from the request', function () {
+    $this->post(route('register.store'), [
+        'name' => 'John Doe',
+        'email' => 'test@example.com',
+        'password' => 'password',
+        'password_confirmation' => 'password',
+        'is_admin' => true,
+    ]);
+
+    $this->assertDatabaseHas('users', [
+        'email' => 'test@example.com',
+        'is_admin' => false,
+    ]);
+});

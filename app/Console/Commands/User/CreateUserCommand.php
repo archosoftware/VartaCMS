@@ -8,10 +8,11 @@ use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Validation\ValidationException;
 
+use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\password;
 use function Laravel\Prompts\text;
 
-#[Signature('app:user:create {--name=} {--email=} {--password=}')]
+#[Signature('app:user:create {--name=} {--email=} {--password=} {--is_admin}')]
 #[Description('Create a new user')]
 class CreateUserCommand extends Command
 {
@@ -23,6 +24,7 @@ class CreateUserCommand extends Command
         $name = $this->stringOption('name') ?? text(label: 'Name', required: true);
         $email = $this->stringOption('email') ?? text(label: 'Email', required: true);
         $password = $this->stringOption('password') ?? password(label: 'Password', required: true);
+        $isAdmin = $this->option('is_admin') || confirm(label: 'Is this user an admin?', default: false);
 
         try {
             $user = $createsNewUsers->create([
@@ -31,6 +33,11 @@ class CreateUserCommand extends Command
                 'password' => $password,
                 'password_confirmation' => $password,
             ]);
+
+            if ($isAdmin) {
+                $user->is_admin = true;
+                $user->save();
+            }
         } catch (ValidationException $exception) {
             foreach ($exception->validator->errors()->all() as $error) {
                 $this->components->error($error);
