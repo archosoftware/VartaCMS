@@ -1,9 +1,9 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/livewire-starter-kit",
+    "name": "archosoftware/vartacms",
     "type": "project",
-    "description": "The official Laravel starter kit for Livewire.",
-    "keywords": ["laravel", "framework"],
+    "description": "Modern, extensible forum software built with Laravel.",
+    "keywords": ["laravel", "framework", "forum", "cms", "vartacms"],
     "license": "MIT",
     "require": {
         "php": "^8.3",
